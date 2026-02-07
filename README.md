@@ -101,8 +101,3 @@ This project strictly follows the **Department of Computer Science** guidelines 
 - [x] Mongoose Hooks & Pre-save Encryption
 - [x] Detailed Documentation & READMEs
 
----
-
-## 📄 License & Credits
-Developed by **[Your Name]** as a Final Year Project for Computer Science.
-Submitted: February 8, 2026.
