@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowPathIcon,
     ClockIcon,
     ChevronLeftIcon,
     MagnifyingGlassIcon,
-    FunnelIcon,
-    PresentationChartBarIcon
+    FunnelIcon
 } from '@heroicons/react/24/outline';
 import { teacherAPI } from '../../services/api';
 
@@ -61,15 +59,6 @@ const QuizResults = () => {
     );
 
     if (!quiz) return <div className="text-center py-12 text-red-500 font-bold">Quiz Not Found</div>;
-
-    const statsOverview = {
-        total: liveStats.length,
-        inProgress: liveStats.filter(s => s.status_label === 'In Progress' || s.status_label === 'Started').length,
-        finished: liveStats.filter(s => s.status_label === 'Finished').length,
-        avgAccuracy: liveStats.length > 0
-            ? (liveStats.reduce((acc, s) => acc + (s.percentage || 0), 0) / liveStats.length).toFixed(1)
-            : 0
-    };
 
     const getProgressColor = (percentage) => {
         if (percentage >= 80) return 'bg-green-500';

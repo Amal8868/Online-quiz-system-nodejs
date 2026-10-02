@@ -126,7 +126,7 @@ const QuizManage = () => {
         buttonText: 'Okay'
     });
 
-    const showAlert = (title, message, type = 'success', buttonText = 'Okay') => {
+    const showAlert = useCallback((title, message, type = 'success', buttonText = 'Okay') => {
         setAlertConfig({
             isOpen: true,
             title,
@@ -134,7 +134,7 @@ const QuizManage = () => {
             type,
             buttonText
         });
-    };
+    }, []);
 
     const closeAlert = () => {
         setAlertConfig(prev => ({ ...prev, isOpen: false }));
@@ -230,7 +230,7 @@ const QuizManage = () => {
     }, [quizId]);
 
     // UPDATE STATUS: e.g. "Activate" or "Finish" the quiz.
-    const updateStatus = async (newStatus) => {
+    const updateStatus = useCallback(async (newStatus) => {
         try {
             await teacherAPI.updateQuizStatus(quizId, newStatus);
             fetchQuiz();
@@ -240,7 +240,7 @@ const QuizManage = () => {
             const errorMsg = error.response?.data?.error || error.message;
             showAlert('Update Failed', errorMsg, 'error');
         }
-    };
+    }, [quizId, fetchQuiz, showAlert]);
 
     /**
      * THE TIME BENDER (handleTimeAdjustment):
@@ -343,7 +343,7 @@ const QuizManage = () => {
         calculateTime();
         const timer = setInterval(calculateTime, 1000);
         return () => clearInterval(timer);
-    }, [quiz]);
+    }, [quiz, updateStatus]);
 
     // Watch for Status Changes to Finished
     const prevStatusRef = useRef(null);
