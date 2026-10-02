@@ -3,15 +3,12 @@ import { motion } from 'framer-motion';
 import {
     UserGroupIcon,
     AcademicCapIcon,
-    MagnifyingGlassIcon,
-    ChevronRightIcon,
-    PresentationChartBarIcon
+    MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import { teacherAPI } from '../../services/api';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const ClassList = () => {
-    const navigate = useNavigate();
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');

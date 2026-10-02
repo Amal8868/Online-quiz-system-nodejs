@@ -62,7 +62,7 @@ const ExamPage = () => {
             alert('Failed to submit exam. Please try again.');
             setSubmitting(false);
         }
-    }, [resultId, resultNumericId, submitting, navigate, isPaused, isBlocked]);
+    }, [resultId, resultNumericId, submitting, navigate, isBlocked]);
 
     // MULTIPLE CHOICE SELECTOR: Handles picking one or more answers.
     const handleMSQToggle = (questionId, optionId) => {
@@ -219,7 +219,7 @@ const ExamPage = () => {
         if (loading) {
             initExam();
         }
-    }, [quiz, student, loading, handleSubmit]);
+    }, [quiz, student, loading, handleSubmit, navigate]);
 
     // THE TICKER: Decreases the timer every 1 second.
     useEffect(() => {

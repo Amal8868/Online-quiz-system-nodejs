@@ -354,7 +354,7 @@ const QuizManage = () => {
         if (quiz) {
             prevStatusRef.current = quiz.status;
         }
-    }, [quiz]);
+    }, [quiz, showAlert]);
 
 
 
