@@ -1,28 +1,34 @@
 const User = require('../models/User');
 
+// Optional, one-time bootstrap. Existing accounts and passwords are never changed.
 const seedAdmin = async () => {
-    try {
-        const admin = await User.findOne({ email: 'admin@test.com' });
+    const email = process.env.INITIAL_ADMIN_EMAIL;
+    const password = process.env.INITIAL_ADMIN_PASSWORD;
 
-        if (!admin) {
-            await User.create({
-                first_name: 'System',
-                last_name: 'Admin',
-                user_id: 'ADM-101',
-                email: 'admin@test.com',
-                password: '1234',
-                user_type: 'Admin',
-                status: 'Active'
-            });
-            console.log('Default Admin Created: admin@test.com / 1234');
-        } else {
-            admin.password = '1234';
-            await admin.save();
-            console.log('Admin Password Synced: 1234');
-        }
-    } catch (err) {
-        console.error('Error seeding admin:', err.message);
+    if (!email || !password) {
+        console.log('Initial admin not configured; skipping admin bootstrap.');
+        return;
     }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        if (existingUser.user_type !== 'Admin') {
+            throw new Error(`INITIAL_ADMIN_EMAIL ${email} belongs to a non-admin account; choose an unused email.`);
+        }
+        console.log(`Initial admin account already exists for ${email}; password was not changed.`);
+        return;
+    }
+
+    await User.create({
+        first_name: process.env.INITIAL_ADMIN_FIRST_NAME || 'System',
+        last_name: process.env.INITIAL_ADMIN_LAST_NAME || 'Admin',
+        user_id: `ADM-${Date.now()}`,
+        email,
+        password,
+        user_type: 'Admin',
+        status: 'Active'
+    });
+    console.log(`Initial admin created: ${email}`);
 };
 
 module.exports = seedAdmin;

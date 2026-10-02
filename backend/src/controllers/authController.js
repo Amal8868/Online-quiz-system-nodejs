@@ -5,7 +5,7 @@ const User = require('../models/User');
 // @access  Public
 exports.register = async (req, res, next) => {
     try {
-        let { name, first_name, last_name, user_id, email, password, user_type, gender, phone } = req.body;
+        let { name, first_name, last_name, user_id, email, password, gender, phone } = req.body;
 
         // If 'name' is provided (from old frontend), split it
         if (name && !first_name) {
@@ -16,8 +16,8 @@ exports.register = async (req, res, next) => {
 
         // Auto-generate user_id if missing (e.g., TCH-123)
         if (!user_id) {
-            const count = await User.countDocuments({ user_type: user_type || 'Student' });
-            const prefix = (user_type || 'Student').substring(0, 3).toUpperCase();
+            const count = await User.countDocuments({ user_type: 'Student' });
+            const prefix = 'STU';
             user_id = `${prefix}-${100 + count + 1}`;
         }
 
@@ -28,7 +28,8 @@ exports.register = async (req, res, next) => {
             user_id,
             email,
             password,
-            user_type: user_type ? (user_type.charAt(0).toUpperCase() + user_type.slice(1).toLowerCase()) : 'Student',
+            // Public registration must never allow users to grant themselves elevated roles.
+            user_type: 'Student',
             gender,
             phone,
             first_login: false // Ensure self-registered users don't get prompted to change password

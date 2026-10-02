@@ -8,8 +8,8 @@ import axios from 'axios';
  * server using the functions in this file.
  */
 
-// Adjust this URL to match your XAMPP setup!
-const API_URL = 'http://localhost:5000/api';
+// Set REACT_APP_API_URL in the hosting provider for production.
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // We use AXIOS because it's like a smart messenger service. 
 // It handles headers, JSON, and errors way better than the browser's default 'fetch'.

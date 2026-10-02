@@ -23,11 +23,13 @@ const student = require('./routes/studentRoutes');
 // Load env vars
 dotenv.config();
 
-// Connect to database
-connectDB().then(() => {
-    const seedAdmin = require('./utils/seedAdmin');
-    seedAdmin();
-});
+// Connect to the database and create the initial admin only when explicitly configured.
+connectDB()
+    .then(() => require('./utils/seedAdmin')())
+    .catch((err) => {
+        console.error(`Startup initialization failed: ${err.message}`);
+        process.exit(1);
+    });
 
 const app = express();
 
@@ -35,8 +37,19 @@ const app = express();
 app.use(express.json());
 
 // Enable CORS
+const allowedOrigins = [process.env.CLIENT_URL];
+if (process.env.NODE_ENV !== 'production') {
+    allowedOrigins.push('http://localhost:3000');
+}
+
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: (origin, callback) => {
+        // Allow server-to-server and command-line requests that do not send Origin.
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('Origin is not allowed by CORS'));
+    },
     credentials: true
 }));
 
