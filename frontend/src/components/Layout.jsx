@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { HomeIcon, PlusCircleIcon, ChartBarIcon, AcademicCapIcon, PencilSquareIcon, ArrowLeftOnRectangleIcon, UserGroupIcon, UserPlusIcon, BookOpenIcon } from '@heroicons/react/24/outline';
 import ThemeToggle from './ThemeToggle';
@@ -31,7 +31,7 @@ const Layout = ({ type = 'default' }) => {
   }, []);
 
   // LOGOUT LOGIC: Clearing the browser's memory so someone else can't use our account.
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await authAPI.logout();
     } catch (error) {
@@ -43,7 +43,7 @@ const Layout = ({ type = 'default' }) => {
       console.log("DEBUG [Layout]: Storage cleared, navigating to /login");
       navigate('/login');
     }
-  };
+  }, [navigate]);
 
   // Helper to highlight the link the user is currently on in the Sidebar.
   const isActive = (path) => {
@@ -152,7 +152,7 @@ const Layout = ({ type = 'default' }) => {
       localStorage.setItem('lastQuizId', currentQuizId);
       setPersistedQuizId(currentQuizId);
     }
-  }, [currentQuizId, type, navigate]);
+  }, [currentQuizId, type, navigate, handleLogout]);
 
   // Separate effect for initial quiz fetch to avoid complex dependency triggers
   useEffect(() => {

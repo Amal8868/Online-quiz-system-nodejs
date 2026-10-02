@@ -71,8 +71,6 @@ const TeacherLogin = () => {
                 const res = await authAPI.getCurrentUser();
                 if (res.data.success && res.data.data.user) {
                     const userData = res.data.data.user;
-                    const token = res.data.data.token;
-
                     // We found a session! Let's save it temporarily so we don't have to ask again.
                     sessionStorage.setItem('user', JSON.stringify(userData));
                     // Make sure we DON'T set "undefined" as a string if token is missing
